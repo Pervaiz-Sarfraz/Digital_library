@@ -15,19 +15,16 @@ switch ($method) {
         $checkemail = $user->email;
         $checkpassword = $user->password;
         if (($checkemail) && isset($checkpassword)) {
-            $sql = "SELECT * FROM users WHERE email = :checkemail";  // Fix the parameter name
+            $sql = "SELECT * FROM users WHERE email = :checkemail";  
             $stmt = $pdo->prepare($sql);
-            $stmt->bindParam(':checkemail', $checkemail);  // Fix the parameter name
+            $stmt->bindParam(':checkemail', $checkemail);  
             $stmt->execute();
 
-            // Fetch the result as an associative array
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             
-            // Check if the email exists
             if ($user) {
-                // Email exists, now verify the password
-                $hashedPasswordFromDB = $user['password'];  // Corrected the column name
-                $hashedPasswordEntered = password_hash($checkpassword, PASSWORD_DEFAULT);  // Hash the entered password for comparison
+                $hashedPasswordFromDB = $user['password'];  
+                $hashedPasswordEntered = password_hash($checkpassword, PASSWORD_DEFAULT); 
 
                 if (password_verify($checkpassword, $hashedPasswordFromDB)) {
                     echo json_encode(["status" => "success", "message" => "Login successful", "userId" => $user['id'], "username" => $user['username']]);
@@ -35,16 +32,13 @@ switch ($method) {
                     echo json_encode(["status" => "error", "message" => "Invalid password"]);
                 }
             } else {
-                // Email not found
                 echo json_encode(["status" => "error", "message" => "Invalid email"]);
             }
         } else {
-            // Email or password not set in POST data
             echo json_encode(["status" => "error", "message" => "Email or password not provided"]);
         }
         break;
 }
 
-// Set $pdo to null to close the connection
 $pdo = null;
 ?>

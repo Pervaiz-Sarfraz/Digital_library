@@ -11,7 +11,6 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
     case "GET":
-        // Check for email existence
         if (isset($_GET['email'])) {
             $checkemail = $_GET['email'];
             $sql = "SELECT COUNT(email) as count FROM users WHERE email = :email";
@@ -26,8 +25,6 @@ switch ($method) {
                 exit();
             }
         }
-
-        // Check for username existence
         if (isset($_GET['username'])) {
             $checkusername = $_GET['username'];
             $sql = "SELECT COUNT(username) as count FROM users WHERE username = :username";
@@ -46,7 +43,6 @@ switch ($method) {
         break;
 
     case "POST":
-        // Handle registration logic
         $user = json_decode(file_get_contents('php://input'));
         $email = $user->email;
         $password = $user->password;
